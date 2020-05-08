@@ -1,0 +1,27 @@
+{
+  "name": "guess-mine",
+  "version": "1.0.0",
+  "description": "draw picture real time",
+  "main": "index.js",
+  "scripts": {
+    "dev:server": "nodemon --exec babel-node src/server --delay 2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WachsenHaus/guess-MINE.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WachsenHaus/guess-MINE/issues"
+  },
+  "homepage": "https://github.com/WachsenHaus/guess-MINE#readme",
+  "dependencies": {
+    "@babel/core": "^7.9.6",
+    "@babel/node": "^7.8.7",
+    "@babel/preset-env": "^7.9.6",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.3",
+    "socket.io": "^2.3.0"
+  }
+}
