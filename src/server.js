@@ -1,34 +1,27 @@
 import express from "express";
-import path from 'path';
-import {join} from 'path';
+import { join } from "path";
 
 import socketIO from "socket.io";
-const PORT = 4001 || null;
+import logger from "morgan";
+
+const PORT = 4040 || null;
 const app = express();
-app.set('view engine','pug');
-
-console.log(__dirname);
-// console.log(path.normalize("C:\\\\\\\\Users\\..\\.\\guess-MINE\\src\\views"))
-// console.log(path.resolve("aas\\..\\.\\wawawa\\guess-MINE\\src\\views"))
-console.log(__filename);
-console.log(path.basename(__filename,path.extname(__filename)));
-//아래 3개는 동일한 소스코드이다. 
-// app.set('views',join(__dirname,"views"));
-// app.set('views',"C:\\Users\\wachsenhaus\\Documents\\guess-MINE\\src\\views")
-app.set('views',`${__dirname}\\views`);
-// app.set('views',`${path.normalize("C:\\\\\\\\Users\\..\\.\\guess-MINE\\src")}\\views`);
-// app.set('views',path.join(__dirname,"views"));
-
-
-app.use(express.static(join(__dirname,"static")));
-// app.get("/", (req,res) => res.render("home"));
+app.set("view engine", "pug");
+app.set("views", `${__dirname}\\views`);
+app.use(logger("dev"));
+app.use(express.static(join(__dirname, "static")));
 app.get("/", openHome);
 
-function openHome(req,res)
-{
-    res.render("home");
+function openHome(req, res) {
+  res.render("home");
 }
 
 const handleListening = () => console.log(`✔ Server running : http://localhost:${PORT}`);
+const server = app.listen(PORT, handleListening);
+const io = socketIO.listen(server);
 
-app.listen(PORT,handleListening);
+//누군가가 서버와 연결되면 sombody connected가 출력될것이다.
+io.on("connection", (socket) => {
+  socket.emit("hello");
+  // socket.broadcast.emit("hello"); //hello라는 이벤트를 발생한다.
+});
