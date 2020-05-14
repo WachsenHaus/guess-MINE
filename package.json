@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev:server": "nodemon --exec babel-node src/server --delay 2",
-    "lint": "eslint . --fix"
+    "lint": "eslint . --fix",
+    "build:styles": "gulp styles"
   },
   "repository": {
     "type": "git",
@@ -22,7 +23,10 @@
     "@babel/node": "^7.8.7",
     "@babel/preset-env": "^7.9.6",
     "express": "^4.17.1",
+    "gulp": "^4.0.2",
+    "gulp-sass": "^4.1.0",
     "morgan": "^1.10.0",
+    "node-sass": "^4.14.1",
     "nodemon": "^2.0.3",
     "pug": "^2.0.4",
     "socket.io": "^2.3.0"

@@ -21,7 +21,16 @@ const server = app.listen(PORT, handleListening);
 const io = socketIO.listen(server);
 
 //누군가가 서버와 연결되면 sombody connected가 출력될것이다.
+//먼저 연결이 되야함. connection
 io.on("connection", (socket) => {
-  socket.emit("hello");
-  // socket.broadcast.emit("hello"); //hello라는 이벤트를 발생한다.
+  socket.on("newMessage", (message) => {
+    socket.broadcast.emit("messageNotif", {
+      message,
+      nickname: socket.nickname || "Anon",
+    }); //메세지를 보내면 닉네임과 같이 보냄.
+  });
+  socket.on("setNickname", ({ nickname }) => {
+    //setNickname이라는 이벤트로 닉네임을 받으면 객체에 nickname을 할당한다.
+    socket.nickname = nickname; //소켓은 그냥 객체임. socket.potato = 5이런것도가능함.
+  });
 });
