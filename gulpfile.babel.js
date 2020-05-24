@@ -4,6 +4,9 @@ import autoprefixer from "gulp-autoprefixer";
 import minifyCSS from "gulp-csso";
 import del from "del";
 import bro from "gulp-browserify";
+import babel from "babelify";
+
+sass.compiler = require("node-sass");
 
 const paths = {
   styles: {
@@ -12,12 +15,15 @@ const paths = {
     watch: "assets/scss/**/*.scss",
   },
   js: {
-    src: "assets/js/main.js", //*.js는 모든 파일을 컴파일 하겠다는 뜻이다. 내가 원하는건 딱 하나의 파일.
+    src: "assets/js/main.js",
     dest: "src/static/js",
     watch: "assets/js/**/*.js",
   },
 };
-export const styles = () =>
+
+const clean = () => del(["src/static"]);
+
+const styles = () =>
   gulp
     .src(paths.styles.src)
     .pipe(sass())
@@ -30,15 +36,27 @@ export const styles = () =>
     .pipe(minifyCSS())
     .pipe(gulp.dest(paths.styles.dest));
 
+const js = () =>
+  gulp
+    .src(paths.js.src)
+    .pipe(
+      bro({
+        transform: [
+          babel.configure({
+            presets: ["@babel/preset-env"],
+          }),
+        ],
+      })
+    )
+    .pipe(gulp.dest(paths.js.dest));
+
 const watchFiles = () => {
   gulp.watch(paths.styles.watch, styles);
   gulp.watch(paths.js.watch, js);
 };
-const js = () => {
-  gulp.src(paths.js.src).pipe(bro()).pipe(gulp.dest(paths.js.dest));
-};
 
-const clean = () => del("src/static"); //폴더를 지운다.
+const dev = gulp.series(clean, styles, js, watchFiles);
 
-const dev = gulp.series([clean, styles, js, watchFiles]);
+export const build = gulp.series(clean, styles, js);
+
 export default dev;
