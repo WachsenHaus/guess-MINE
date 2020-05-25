@@ -1,8 +1,18 @@
 import events from "./events";
 const socketController = (socket) => {
+  const broadcast = (event, data) => {
+    socket.broadcast.emit(event, data); //이벤트 , 전달된 데이터.
+  };
+
+  socket.on(events.sendMsg, ({ message }) => {
+    broadcast(events.newMsg, { message, nickname: socket.nickname });
+  });
   socket.on(events.setNickname, ({ nickname }) => {
-    console.log(nickname);
     socket.nickname = nickname;
+    broadcast(events.newUser, { nickname });
+  });
+  socket.on(events.disconnect, () => {
+    broadcast(events.disconnected, { nickname: socket.nickname });
   });
   //   socket.on("newMessage", (message) => {
   //     socket.broadcast.emit("messageNotif", {

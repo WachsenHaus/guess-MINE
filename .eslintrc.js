@@ -12,6 +12,12 @@ module.exports = {
 
   rules: {
     "no-console": "off",
+    "no-unused-vars": 0,
+    "no-use-before-define": 0,
+    "no-redeclare": 0,
+    "no-dupe-else-if": 0,
+    "no-import-assign": 0,
+    "no-setter-return": 0,
     "prettier/prettier": [
       "error",
       {
