@@ -1,3 +1,6 @@
+//이벤트를 듣는 컨트롤러.
+//이벤트를 수신하고 행동을 취한다.
+
 import events from "./events";
 const socketController = (socket) => {
   const broadcast = (event, data) => {
@@ -13,6 +16,22 @@ const socketController = (socket) => {
   });
   socket.on(events.disconnect, () => {
     broadcast(events.disconnected, { nickname: socket.nickname });
+  });
+  socket.on(events.sendMsg, ({ message }) => {
+    broadcast(events.newMsg, { message, nickname: socket.nickname });
+  });
+
+  socket.on(events.beginPath, ({ x, y }) =>
+    broadcast(events.beganPath, { x, y })
+  );
+
+  socket.on(events.strokePath, ({ x, y, color }) => {
+    broadcast(events.strokedPath, { x, y, color });
+  });
+
+  //fill이벤트를 받으면 filled이벤트를 브로드캐스트할거야.
+  socket.on(events.fill, ({ color }) => {
+    broadcast(events.filled, { color });
   });
   //   socket.on("newMessage", (message) => {
   //     socket.broadcast.emit("messageNotif", {
